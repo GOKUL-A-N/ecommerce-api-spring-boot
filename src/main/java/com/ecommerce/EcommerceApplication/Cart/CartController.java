@@ -4,24 +4,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/user/{userId}/cart")
+@RequestMapping("/cart")
 public class CartController {
+
     @Autowired
     private CartService cartService;
 
-    @GetMapping("/{id}")
-    public CartModel getCart(@PathVariable String id){
-        return cartService.getCart(id);
-    }
-
     @PostMapping
-    public CartModel createCart(@RequestBody CartModel cart){
-        return cartService.createCart(cart);
+    public CartModel createCart(){
+        return cartService.createCart();
     }
 
-    @PutMapping("/{id}/addItem")
-    public CartModel addItemToCart(@PathVariable String id,@RequestBody String productId){
-        return cartService.addItemToCart(id,productId);
+    @PostMapping("/{cartId}/add")
+    public CartModel addItemCart(
+            @PathVariable String cartId,
+            @RequestParam String productId,
+            @RequestParam int quantity
+    ){
+        return cartService.addItemToCart(cartId,productId,quantity);
     }
 
+    @GetMapping("/{cartId}")
+    public CartModel getCart(@PathVariable String cartId){
+        return cartService.getCart(cartId);
+    }
+
+    @PostMapping("/{cartId}/remove")
+    public CartModel removeItemFromCart(
+            @PathVariable String cartId,
+            @RequestParam String productId) {
+        return cartService.removeItemFromCart(cartId, productId);
+    }
 }

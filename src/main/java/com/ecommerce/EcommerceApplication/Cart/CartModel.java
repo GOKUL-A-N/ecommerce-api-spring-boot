@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "Cart")
@@ -16,12 +17,9 @@ public class CartModel {
     private String id;
 
     @DBRef
-    private UserModel user;
+    private List<CartItems> items = new ArrayList<>();
 
-    @DBRef
-    private List<ProductModel> products;
-
-    private double totalAmount;
+    private double totalPrice;
 
     public String getId() {
         return id;
@@ -31,37 +29,27 @@ public class CartModel {
         this.id = id;
     }
 
-    public UserModel getUser() {
-        return user;
+    public List<CartItems> getItems() {
+        return items;
     }
 
-    public void setUser(UserModel user) {
-        this.user = user;
+    public void setItems(List<CartItems> items) {
+        this.items = items;
     }
 
-    public List<ProductModel> getProducts() {
-        return products;
+    public double getTotalPrice() {
+        return totalPrice;
     }
 
-    public void setProducts(List<ProductModel> products) {
-        this.products = products;
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
-    public double getTotalAmount() {
-        return totalAmount;
-    }
+    public CartModel() {}
 
-    public void setTotalAmount(double totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    public void addProduct(ProductModel product){
-        products.add(product);
-        totalAmount += product.getPrice();
-    }
-
-    public void removeproduct(ProductModel product){
-        products.remove(product);
-        totalAmount -= product.getPrice();
+    public CartModel(String id,List<CartItems> items,double totalPrice){
+        this.id = id;
+        this.items = items;
+        this.totalPrice = totalPrice;
     }
 }
